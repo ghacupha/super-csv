@@ -1,0 +1,78 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~ Copyright 2007 Kasper B. Graversen
+~~ 
+~~ Licensed under the Apache License, Version 2.0 (the "License");
+~~ you may not use this file except in compliance with the License.
+~~ You may obtain a copy of the License at
+~~ 
+~~     http://www.apache.org/licenses/LICENSE-2.0
+~~ 
+~~ Unless required by applicable law or agreed to in writing, software
+~~ distributed under the License is distributed on an "AS IS" BASIS,
+~~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~ See the License for the specific language governing permissions and
+~~ limitations under the License.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                    -------
+                                    Welcome
+                                    -------
+
+Super CSV
+
+* Motivation
+
+  The main motivation for Super CSV is to be the <foremost, fastest, and most programmer-friendly, free CSV package for Java>.
+  
+* Features
+
+  Super CSV offers the following features not found together in other CSV packages:
+  
+** POJO support
+
+  Read or write using any old Javabean.
+  Perform <deep mapping> and <index-based mapping> using the new Dozer extension!
+  For the old-fashioned, you can read or write with Lists and Maps as well.
+      
+** Automatic CSV encoding
+
+  Forget about handling special characters such as commas and double-quotes - Super CSV will take care of that for you!
+  All content is properly escaped/un-escaped according to the {{{./csv_specification.html}CSV specification}}.
+      
+** Highly configurable
+
+  Choose your own delimiter, quote character, escape character, and line separator - or just use one of the predefined configurations.
+  Comma-separated, tab-separated, semicolon-separated (Germany/Denmark) - it's all possible.
+      
+** Data conversion
+
+  Powerful cell processors make it simple to parse input (to Booleans, Integers, Dates, etc),
+  transform values (trimming Strings, doing regular expression replacement, etc) and format output like Dates and Numbers.
+      
+** Constraint validation
+
+  Verify that your data conforms to one or more constraints, such as number ranges, string lengths or uniqueness.
+      
+** Stream-based I/O
+
+  Operates on streams rather than filenames, and gives you the control to flush or close the streams when you want.
+  Write to a file, over the network, to a zip file, whatever!
+
+* Message from the author
+
+  My years in industry dealing with  CSV files (among other things ;-), has enabled me to identify a number of limitations with existing CSV packages.
+  These limitations led me to write Super CSV.
+  My main criticism of existing CSV packages is that reading and writing operates on lists of strings.
+  What you really need is the ability to operate on a range of different types of objects. 
+  Moreover, you often need to restrict input/output data with constraints such as minimum and maximum sizes, or numeric ranges. 
+  Or maybe you are reading image names, and want to ensure you do not read names contain the characters ":", " ", "/", "^", "%".
+  
+  Super CSV deals with all these and many other issues. 
+  And should you have a constraint not readily expressible in the package, new cell processors can easily be constructed. 
+  Furthermore, you don't want to "CSV encode" strings you write. If they happen to contain characters that needs escaping, then the CSV package should take care of this automatically!
+
+  The underlying implementation of Super CSV has been written in an extensible fashion, hence new readers/writers and cell processors can easily be supported.
+  The <inversion of control> implementation pattern has been enforced, eradicating long-lived mistakes such as using
+  filenames as arguments rather than Reader and Writer objects. Design patterns such as <chain of responsibility> and the
+  <null object pattern> can also be found in the code. Feel free to have a look!
+  
+  <Kasper>

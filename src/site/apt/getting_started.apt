@@ -1,0 +1,31 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~ Copyright 2007 Kasper B. Graversen
+~~ 
+~~ Licensed under the Apache License, Version 2.0 (the "License");
+~~ you may not use this file except in compliance with the License.
+~~ You may obtain a copy of the License at
+~~ 
+~~     http://www.apache.org/licenses/LICENSE-2.0
+~~ 
+~~ Unless required by applicable law or agreed to in writing, software
+~~ distributed under the License is distributed on an "AS IS" BASIS,
+~~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~ See the License for the specific language governing permissions and
+~~ limitations under the License.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                    ---------------
+                                    Where to begin?
+                                    ---------------
+
+Where to begin?
+
+    [[1]] {{{./downloading.html}Download}} Super CSV
+    
+    [[2]] Choose a {{{./readers.html}reader}} or {{{./writers.html}writer}} - there are 4 of each to choose from!
+    
+    [[3]] Choose your {{{./preferences.html}preferences}} for reading/writing (including choice of delimiter, quote character, and end of line symbols)
+
+    [[4]] Choose from a wide variety of {{{./cell_processors.html}cell processors}} to apply conversions or constraints to your data
+          
+    [[5]] Check out the {{{./examples_reading.html}reading}} and {{{./examples_writing.html}writing}} examples to see how it's all put together!
+

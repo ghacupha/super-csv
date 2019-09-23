@@ -1,0 +1,229 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~ Copyright 2007 Kasper B. Graversen
+~~ 
+~~ Licensed under the Apache License, Version 2.0 (the "License");
+~~ you may not use this file except in compliance with the License.
+~~ You may obtain a copy of the License at
+~~ 
+~~     http://www.apache.org/licenses/LICENSE-2.0
+~~ 
+~~ Unless required by applicable law or agreed to in writing, software
+~~ distributed under the License is distributed on an "AS IS" BASIS,
+~~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~~ See the License for the specific language governing permissions and
+~~ limitations under the License.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                    ---------------
+                                    CSV Preferences
+                                    ---------------
+
+CSV Preferences
+
+  Readers and Writers in Super CSV are configured using the {{{./apidocs/org/supercsv/prefs/CsvPreference.html}CsvPreference}} class.
+  This class is immutable and is assembled using the {{{http://en.wikipedia.org/wiki/Builder_pattern}Builder pattern}}.
+
+  The preferences available are:
+
+    [quoteChar] The quote character (used when a cell contains special characters, such as the delimiter char, a quote char, or spans multiple lines).
+
+    []
+
+    [delimiterChar] The delimiter character (separates each cell in a row).
+
+    []
+
+    [endOfLineSymbols] The end of line symbols to use when <writing> (Windows, Mac and Linux style line breaks are all supported when reading, so this preference won't be used at all for reading).
+
+    []
+
+    [surroundingSpacesNeedQuotes] Whether spaces surrounding a cell need quotes in order to be preserved (see below). The default value is false (quotes aren't required).
+
+    []
+
+    [ignoreEmptyLines] Whether empty lines (i.e. containing only end of line symbols) are ignored. The default value is true (empty lines are ignored).
+
+    []
+
+    [emptyColumnParsing] Controls how to handle empty columns, whether they should be treated as null, or as an empty String: "".  Valid values are ParseEmptyColumnsAsNull and ParseEmptyColumnsAsEmptyString.  The default value is ParseEmptyColumnsAsNull.
+
+    []
+
+    [maxLinesPerRow] The maximum number of lines a row of CSV can span (useful for debugging large files with mismatched quotes, as it ensures fast failure and prevents OutOfMemoryErrors when trying to find the matching quote).
+
+    []
+
+    [skipComments] Skips comments (what makes up a comment is determined by the CommentMatcher you supply). See the section on skipping comments below for more information.
+
+    []
+
+    [encoder] Use your own encoder when writing CSV. See the section on custom encoders below.
+
+    []
+
+    [quoteMode] Allows you to enable surrounding quotes for writing (if a column wouldn't normally be quoted because it doesn't contain special characters).
+    See the section on quote modes below.
+
+    []
+
+    [quoteEscapeChar] The escape character to use for escaping the quote character.  Used to modify the character used to escape quote characters from the RFC-compliant value of another quote to a custom character.
+
+    []
+
+* Predefined preferences
+
+  There are four 'ready to use' configurations for typical scenarios.
+
+*------------------------------------------------------------------------------------------------------------------+-------------*-----------------*----------------------*
+ <<Constant>>                                                                                                      || Quote char || Delimiter char || End of line symbols 
+*------------------------------------------------------------------------------------------------------------------+-------------*-----------------*----------------------*
+ {{{./apidocs/org/supercsv/prefs/CsvPreference.html#STANDARD_PREFERENCE}STANDARD_PREFERENCE}}                      |        "    |           ,     |       \\r\\n         
+*------------------------------------------------------------------------------------------------------------------+-------------*-----------------*----------------------*
+ {{{./apidocs/org/supercsv/prefs/CsvPreference.html#EXCEL_PREFERENCE}EXCEL_PREFERENCE}}                            |        "    |           ,     |        \\n           
+*------------------------------------------------------------------------------------------------------------------+-------------*-----------------*----------------------*
+ {{{./apidocs/org/supercsv/prefs/CsvPreference.html#EXCEL_NORTH_EUROPE_PREFERENCE}EXCEL_NORTH_EUROPE_PREFERENCE}}  |        "    |           ;     |        \\n           
+*------------------------------------------------------------------------------------------------------------------+-------------*-----------------*----------------------*
+ {{{./apidocs/org/supercsv/prefs/CsvPreference.html#TAB_PREFERENCE}TAB_PREFERENCE}}                                |        "    |          \\t    |        \\n           
+*------------------------------------------------------------------------------------------------------------------+-------------*-----------------*----------------------*
+
+
+  All of these configurations use the default values of:
+
+*----------------------------+-------------------------------------------------------------------------------------*
+ <<Preference>>              || Default value
+*----------------------------+-------------------------------------------------------------------------------------*
+ surroundingSpacesNeedQuotes | false
+*----------------------------+-------------------------------------------------------------------------------------*
+ ignoreEmptyLines            | true
+*----------------------------+-------------------------------------------------------------------------------------*
+ maxLinesPerRow              | 0 (disabled)
+*----------------------------+-------------------------------------------------------------------------------------*
+ encoder                     | {{{./apidocs/org/supercsv/encoder/DefaultCsvEncoder.html}DefaultCsvEncoder}}
+*----------------------------+-------------------------------------------------------------------------------------*
+ quoteMode                   | {{{./apidocs/org/supercsv/quote/NormalQuoteMode.html}NormalQuoteMode}}
+*----------------------------+-------------------------------------------------------------------------------------*
+ skipComments                | false (no CommentMatcher used)
+*----------------------------+-------------------------------------------------------------------------------------*
+
+* Create your own preference
+
+  If none of the predefined preferences suit your purposes, you can easily create your own (you're not just limited to CSV files!).
+  For example, the following code snippet creates preferences suitable for reading/writing pipe-delimited files.
+
++----------------------------------------------------------------------------------------------------+
+private static final CsvPreference PIPE_DELIMITED = new CsvPreference.Builder('"', '|', "\n").build();
++----------------------------------------------------------------------------------------------------+
+
+* Ignoring surrounding spaces if they're not within quotes
+
+  In accordance with {{{http://tools.ietf.org/html/rfc4180}RFC 4180}}, the default behaviour of Super CSV is to treat all spaces as important,
+  <including spaces surrounding the text in a cell>.
+  
+  This means for reading, a cell with contents <<<\ \ \ surrounded by spaces\ \ \ >>> is read with surrounding spaces preserved.
+  And for writing, the same String is written with surrounding spaces and no surrounding quotes (they're not required, as spaces are considered important).
+  
+  There are some scenarios where this restriction must be relaxed, in particular when the CSV file you're working with assumes that
+  <surrounding spaces must be surrounded by quotes, otherwise will be ignored>. For this reason, Super CSV allows you
+  to enable the <<<surroundingSpacesNeedQuotes>>> preference.
+  
+  With <<<surroundingSpacesNeedQuotes>>> enabled, it means that for reading, a cell with contents <<<\ \ \ surrounded by spaces\ \ \ >>>\ would be read as <<<surrounded by spaces>>> (surrounding spaces are trimmed),
+  unless the String has surrounding quotes, e.g. <<<"\ \ \ surrounded by spaces\ \ \ ">>>, in which case the spaces are preserved.
+  And for writing, any String containing surrounding spaces will automatically be given surrounding quotes when written in order to preserve the spaces.
+  
+  You can enable this behaviour by calling <<<surroundingSpacesNeedQuotes(true)>>> on the Builder. You can do this with your own custom preference, or customize an existing preference as shown below.
+
++------------------------------------------------------------------------------------------------------------------------------------------------+
+private static final CsvPreference STANDARD_SURROUNDING_SPACES_NEED_QUOTES = 
+    new CsvPreference.Builder(CsvPreference.STANDARD_PREFERENCE).surroundingSpacesNeedQuotes(true).build();
++------------------------------------------------------------------------------------------------------------------------------------------------+
+  
+  Prior to Super CSV 2.0.0, this behaviour wasn't configurable and surrounding spaces were always trimmed.
+
+* Ignoring empty lines
+
+  By default, all empty lines (which aren't quoted) are ignored when reading CSV. This is useful if your CSV file has leading or trailing
+  empty lines. If you with to disable this behaviour and allow empty lines to be read you can use the <<<ignoreEmptyLines>>> preference:
+
++----------------------------------------------------------------------------------------------------+
+private static final CsvPreference ALLOW_EMPTY_LINES =
+    new CsvPreference.Builder(CsvPreference.STANDARD_PREFERENCE).ignoreEmptyLines(false).build();
++----------------------------------------------------------------------------------------------------+
+
+* Handling empty columns
+
+  By default, an empty column is treated as null when reading CSV. Sometimes however you need an empty column to be treated as an empty String
+  instead: "".  If you wish to change this behavior and treat empty columns as empty String instead of null, you can use the <<<emptyColumnParsing>>> preference:
+
++----------------------------------------------------------------------------------------------------+
+private static final CsvPreference ALLOW_EMPTY_COLUMNS =
+    new CsvPreference.Builder(CsvPreference.STANDARD_PREFERENCE)
+        .setEmptyColumnParsing(EmptyColumnParsing.ParseEmptyColumnsAsEmptyString).build();
++----------------------------------------------------------------------------------------------------+
+
+* Limiting the maximum number of lines per row when reading CSV
+
+  If your CSV file isn't quoted property (is missing a trailing quote, for example), then it's possible that Super CSV will keep reading
+  lines in an attempt to locate the end of the row - for large files this can cause an <<<OutOfMemoryException>>>. By setting the <<<maxLinesPerRow>>>
+  preference Super CSV will fail fast, giving you a chance to locate the row in error and fix it:
+
++----------------------------------------------------------------------------------------------------+
+private static final CsvPreference DISABLE_MULTILINE_ROWS =
+    new CsvPreference.Builder(CsvPreference.STANDARD_PREFERENCE).maxLinesPerRow(10).build();
++----------------------------------------------------------------------------------------------------+
+
+* Custom quote mode
+
+  By default Super CSV only adds surrounding quotes when writing CSV when it contains a delimiter, quote or newline
+  (or if you've enabled <<<surroundingSpacesNeedQuotes>>> and the value has surrounding spaces).
+  
+  Super CSV provides two alternative quoting modes:
+  
+  * {{{./apidocs/org/supercsv/quote/AlwaysQuoteMode.html}AlwaysQuoteMode}} - quotes are always applied
+
+  * {{{./apidocs/org/supercsv/quote/ColumnQuoteMode.html}ColumnQuoteMode}} - quotes are always applied for particular columns
+  
+  []
+  
+  You can also write your own {{{./apidocs/org/supercsv/quote/QuoteMode.html}QuoteMode}}, 
+  but please note that this is a means to <enable> quotes when they're not normally required (you won't be able to disable quotes because
+  then your CSV will not be readable if it contains embedded special characters).
+  Just pass your desired mode to the <<<useQuoteMode()>>> method when building your preferences:
+
++------------------------------------------------------------------------------------------------------------------------------------------------+
+private static final CsvPreference ALWAYS_QUOTE = 
+    new CsvPreference.Builder(CsvPreference.STANDARD_PREFERENCE).useQuoteMode(new AlwaysQuoteMode().build();
++------------------------------------------------------------------------------------------------------------------------------------------------+  
+
+* Custom CSV encoder
+
+  Super CSV provides a powerful {{{./apidocs/org/supercsv/encoder/CsvEncoder.html}CsvEncoder}}, but if you'd like complete control
+  over how your CSV is encoded, then you can supply your own to the <<<useEncoder()>>> method when building your preferences:
+
++------------------------------------------------------------------------------------------------------------------------------------------------+
+private static final CsvPreference CUSTOM_ENCODER = 
+    new CsvPreference.Builder(CsvPreference.STANDARD_PREFERENCE).useEncoder(new MyAwesomeEncoder().build();
++------------------------------------------------------------------------------------------------------------------------------------------------+
+  
+  If you'd like to encode particular columns, but leave other columns unchanged then you can use Super CSV's
+  {{{./apidocs/org/supercsv/encoder/SelectiveCsvEncoder.html}SelectiveCsvEncoder}}. This might be useful if you're really concerned with
+  performance and you know that certain columns will never contain special characters. Just be aware that if a column does contain
+  special characters and you don't encode it, you could end up with invalid CSV.
+  
+* Skipping comments
+
+  Although comments aren't part of RFC4180, some CSV files use them so it's useful to be able to skip these lines (or even skip lines because they contain invalid data).
+  You can use one of the predefined comment matchers:
+  
+  * {{{./apidocs/org/supercsv/comment/CommentStartsWith.html}CommentStartsWith}} - matches lines that start with a specified String
+  
+  * {{{./apidocs/org/supercsv/comment/CommentMatches.html}CommentMatches}} - matches lines that match a specified regular expression
+  
+  []
+  
+  Or if you like you can write your own by implementing the {{{./apidocs/org/supercsv/comment/CommentMatcher.html}CommentMatcher}} interface.
+  
+  Just pass your desired comment matcher to the <<<skipComments()>>> method when building your preferences:
+  
++------------------------------------------------------------------------------------------------------------------------------------------------+
+private static final CsvPreference STANDARD_SKIP_COMMENTS = 
+    new CsvPreference.Builder(CsvPreference.STANDARD_PREFERENCE).skipComments(new CommentStartsWith("#").build();
++------------------------------------------------------------------------------------------------------------------------------------------------+

@@ -1,0 +1,79 @@
+<!-- 
+	Copyright 2007 Kasper B. Graversen
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+	Unless required by applicable law or agreed to in writing, software
+	distributed under the License is distributed on an "AS IS" BASIS,
+	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	See the License for the specific language governing permissions and
+	limitations under the License.
+-->
+<project name="Super CSV">
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>1.4</version>
+	</skin>
+	<custom>
+		<fluidoSkin>
+			<topBarEnabled>false</topBarEnabled>
+			<sideBarEnabled>true</sideBarEnabled>
+			<gitHub>
+        		<projectId>super-csv/super-csv</projectId>
+        		<ribbonOrientation>right</ribbonOrientation>
+        		<ribbonColor>gray</ribbonColor>
+        	</gitHub>
+			<googleSearch />
+			<googlePlusOne />
+			<facebookLike />
+		</fluidoSkin>
+	</custom>
+	<publishDate position="right" />
+	<body>
+		<links>
+			<item name="Donate" href="http://sourceforge.net/p/supercsv/donate/" />
+		</links>
+		<breadcrumbs>
+			<item name="Super CSV" href="http://super-csv.github.io/super-csv/index.html" />
+		</breadcrumbs>
+		<menu name="About Super CSV">
+			<item name="Welcome" href="index.html" />
+			<item name="What is CSV?" href="csv_specification.html" />
+			<item name="Release notes" href="release_notes.html" />
+			<item name="Roadmap" href="roadmap.html" />
+			<item name="Team list" href="team-list.html" />
+			<item name="License" href="license.html" />
+		</menu>
+		<menu name="Getting Started">
+			<item name="Where to begin?" href="getting_started.html" />
+			<item name="Downloading" href="downloading.html" />
+			<item name="Readers" href="readers.html" />
+			<item name="Writers" href="writers.html" />
+			<item name="Preferences" href="preferences.html" />
+			<item name="Cell processors" href="cell_processors.html" />
+			<item name="Dozer extension" href="dozer.html" />
+			<item name="Help!" href="help.html" />
+		</menu>
+		<menu name="Examples">
+			<item name="Reading CSV files" href="examples_reading.html" />
+			<item name="Reading CSV files with variable columns" href="examples_reading_variable_cols.html" />
+			<item name="Writing CSV files" href="examples_writing.html" />
+			<item name="Partial reading" href="examples_partial_reading.html" />
+			<item name="Partial writing" href="examples_partial_writing.html" />
+			<item name="Reading and writing CSV files with Dozer" href="examples_dozer.html" />
+			<item name="Writing CSV files with CsvResultSetWriter" href="examples_jdbc.html" />
+			<item name="Custom cell processors" href="examples_new_cell_processor.html" />
+		</menu>
+		<menu name="Documentation">
+			<item name="Javadoc" href="./apidocs/index.html" />
+			<item name="Source Xref" href="./xref/index.html" />
+			<item name="Test source Xref" href="./xref-test/index.html" />
+		</menu>
+		<menu ref="modules" />
+	</body>
+</project>
